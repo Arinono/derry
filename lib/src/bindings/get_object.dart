@@ -8,7 +8,7 @@ import 'package:derry/models.dart';
 // dart/tflite_native
 
 /// Supported operating systems with architectures.
-const supported = {'win64', 'linux64', 'mac64'};
+const supported = {'win64', 'linux64', 'mac64', 'mac_arm64'};
 
 /// Gets the file name of blob files based on os
 ///
@@ -20,7 +20,7 @@ String getObject() {
     os = 'linux';
     extension = 'so';
   } else if (Platform.isMacOS) {
-    os = 'mac';
+    os = Platform.version.endsWith('on "macos_arm64"') ? 'mac_arm' : 'mac';
     extension = 'dylib';
   } else if (Platform.isWindows) {
     os = 'win';
