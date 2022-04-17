@@ -55,6 +55,33 @@ jobs:
         with:
           path: lib/src/blobs/executor_mac64.dylib
 
+  build_mac_arm64:
+    name: Build for Mac ARM
+    runs-on: macos-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Setup dart environment
+        uses: cedx/setup-dart@v2
+
+      - name: Install derry
+        run: pub global activate derry
+
+      - name: Install rust stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          target: aarch64-apple-darwin
+
+      - run: pub global run derry build mac_arm64
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: lib/src/blobs/executor_mac_arm64.dylib
+
   build_win64:
     name: Build for Windows
     runs-on: windows-latest
@@ -87,6 +114,7 @@ jobs:
     needs:
       - build_linux64
       - build_mac64
+      - build_mac_arm64
       - build_win64
     steps:
       - name: Checkout sources
